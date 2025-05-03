@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="discovery-service" />
         <module name="gateway-service" />
+        <module name="MS-Config" />
       </profile>
       <profile name="Annotation profile for microservices-parent" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -30,6 +31,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Assurance-service" options="-parameters" />
       <module name="Client-service" options="-parameters" />
+      <module name="MS-Config" options="-parameters" />
       <module name="discovery-service" options="-parameters" />
       <module name="gateway-service" options="-parameters" />
     </option>
