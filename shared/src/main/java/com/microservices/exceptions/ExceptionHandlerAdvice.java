@@ -1,4 +1,4 @@
-package com.microservices.assuranceservice.exceptions;
+package com.microservices.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -20,6 +20,7 @@
         <module>discovery-service</module>
         <module>client-service</module>
         <module>assurance-service</module>
+        <module>shared</module>
     </modules>
 
     <properties>
