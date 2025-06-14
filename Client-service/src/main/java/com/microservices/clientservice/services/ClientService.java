@@ -7,6 +7,7 @@ import com.microservices.clientservice.dto.ClientWithAssuranceDto;
 import com.microservices.clientservice.entities.Client;
 import com.microservices.clientservice.mappers.ClientMapper;
 import com.microservices.clientservice.repositories.ClientRepository;
+import com.microservices.clientservice.kafka.ClientProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ public class ClientService implements IClientService {
     private final ClientRepository clientRepository;
     private final ClientMapper clientMapper;
     private final AssuranceClient assuranceClient;
+    private final ClientProducer clientProducer;
 
 
     @Override
@@ -83,9 +85,11 @@ public class ClientService implements IClientService {
     public void addAssuranceIdToClient(String clientId, Long assuranceId) {
         Client client = clientRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
-         client.setAssuranceId(assuranceId);
-            clientRepository.save(client);
-        }
+        client.setAssuranceId(assuranceId);
+        clientRepository.save(client);
+        // Envoi de l'événement Kafka
+        clientProducer.sendClientAssignedToAssurance(clientId, assuranceId);
+    }
 
 public ClientWithAssuranceDto getClientWithAssurance(Long assuranceId) {
     AssuranceDto assurance = assuranceClient.getAssuranceById(assuranceId);

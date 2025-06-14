@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AssuranceService implements IAssuranceService {
@@ -58,10 +61,15 @@ public class AssuranceService implements IAssuranceService {
         return assuranceRepository.findAll(PageRequest.of(page, size))
                 .map(assuranceMapper::assuranceToAssuranceDTO);
     }
+
     @Override
+    @Transactional
     public void addClientIdToAssurance(Long assuranceId, String clientId) {
         Assurance assurance = assuranceRepository.findById(assuranceId)
                 .orElseThrow(() -> new RuntimeException("Assurance not found"));
-                assurance.setClientId(clientId);
-                assuranceRepository.save(assurance);
-}}
+        log.info("Avant update : {}", assurance);
+        assurance.setClientId(clientId);
+        Assurance updated = assuranceRepository.save(assurance);
+        log.info("Après update : {}", updated);
+    }
+}
